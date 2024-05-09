@@ -1,7 +1,6 @@
 package aljwright.myproject.url.shortening.service.api.utilities;
 
 import aljwright.myproject.url.shortening.service.api.entity.URLRecord;
-import aljwright.myproject.url.shortening.service.api.exception.NotValidURLException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.math.BigInteger;
@@ -13,8 +12,20 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
+/**
+ *
+ * Utility class to provide helper methods for data processing
+ *
+ */
 public class URLShorteningAPIUtils {
 
+    /**
+     *
+     * Method used to validate the provided URL
+     * @param url url to be validated
+     * @return
+     * if the provided url is valid or not
+     */
     public static boolean isNotValidURL(String url){
         try {
             new URL(url).toURI();
@@ -24,6 +35,14 @@ public class URLShorteningAPIUtils {
         }
     }
 
+    /**
+     *
+     * Utility method to construct the shortened URL
+     *
+     * @param shortenedMd5 generated hash used for the shortened Url
+     * @return
+     * shortened Url
+     */
     public static String constructUri(String shortenedMd5){
 
         URI currentUri = ServletUriComponentsBuilder.fromCurrentRequestUri()
@@ -34,6 +53,14 @@ public class URLShorteningAPIUtils {
         return currentUri.toString();
     }
 
+    /**
+     *
+     * Utility method to get the Hash based on the long/original Url
+     *
+     * @param longUrl long/original Url
+     * @return
+     * Generated hash value based on the long/original Url
+     */
     public static String getMd5HashOfUrl(String longUrl){
         try {
             // Static getInstance method is called with hashing MD5
@@ -60,6 +87,13 @@ public class URLShorteningAPIUtils {
         }
     }
 
+    /**
+     * Utility Method used to construct the entity to be saved in the DB
+     * @param longUrl long/original Url to be saved
+     * @param shortenedUrl shortened Url based on the long/original Url
+     * @return
+     * Entity Object to be saved in the Database
+     */
     public static URLRecord constructURLEntity(String longUrl,String shortenedUrl){
         URLRecord record = new URLRecord();
         record.setShortUrl(shortenedUrl);
@@ -67,6 +101,15 @@ public class URLShorteningAPIUtils {
         return record;
     }
 
+    /**
+     *
+     * Extract the hash value from the shortened URl
+     *
+     * @param shortUrl shortened Url
+     * @return
+     * hash value separated from the short Url to help lookup in Database
+     *
+     */
     public static String extractMd5FromUrl(String shortUrl)  {
         URI currentUri = null;
         try {

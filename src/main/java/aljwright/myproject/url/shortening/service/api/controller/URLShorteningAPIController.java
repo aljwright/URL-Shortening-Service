@@ -1,6 +1,5 @@
 package aljwright.myproject.url.shortening.service.api.controller;
 
-import aljwright.myproject.url.shortening.service.api.exception.NotValidURLException;
 import aljwright.myproject.url.shortening.service.api.request.URLGetOriginalUrlRequest;
 import aljwright.myproject.url.shortening.service.api.request.URLShorteningRequest;
 import aljwright.myproject.url.shortening.service.api.response.URLShorteningResponse;
@@ -13,8 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.Objects;
 
+/**
+ *
+ * Controller Class used to handle the incoming requests to the URL Shortening Service API
+ *
+ */
 @RestController
 public class URLShorteningAPIController {
 
@@ -24,6 +27,14 @@ public class URLShorteningAPIController {
     @Autowired
     URLShorteningAPIService service;
 
+    /**
+     *
+     * Method to handle incoming request with the Original Url to be shortened
+     *
+     * @param request - contains the URL that needs to be shortened
+     * @return
+     * Shortened URL that can be used to redirect to the Original URL
+     */
     @PostMapping("/shorten")
     @ResponseBody
     public ResponseEntity<URLShorteningResponse> getShortenedURL(@RequestBody URLShorteningRequest request){
@@ -32,7 +43,14 @@ public class URLShorteningAPIController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
+    /**
+     *
+     * Method used to handle the redirect when the short Url is used
+     *
+     * @param shortUrl - short Url used to redirect to the Original URL
+     * @return
+     * Redirection to the Original Url
+     */
     @GetMapping("/{shortUrl}")
     @ResponseBody
     public RedirectView redirectFromUrl(@PathVariable String shortUrl){
@@ -42,6 +60,14 @@ public class URLShorteningAPIController {
         return service.getRedirectUrl(shortUrl);
     }
 
+    /**
+     *
+     * Method to get the Original URl from the Short Url.
+     *
+     * @param request - shortened Url
+     * @return
+     * The original Url used to create the shortened Url
+     */
     @GetMapping("/getOriginalUrl")
     @ResponseBody
     public ResponseEntity<URLShorteningResponse> getOriginalUrl(@RequestBody URLGetOriginalUrlRequest request){

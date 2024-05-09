@@ -18,6 +18,11 @@ import java.util.stream.StreamSupport;
 
 import static aljwright.myproject.url.shortening.service.api.utilities.URLShorteningAPIUtils.*;
 
+/**
+ *
+ * Service Layer used to perform the Data Operations for the URI Shortening API Service
+ *
+ */
 @Service
 public class URLShorteningAPIService {
 
@@ -26,6 +31,16 @@ public class URLShorteningAPIService {
     @Autowired
     URLShorteningAPIRepository repository;
 
+    /**
+     *
+     * Method used to generate shortened URL based on the original / long url
+     *
+     * @param longUrl long/original url to be shortened
+     * @return
+     * response object with the shortened Url
+     * @throws
+     * NotValidURLException in case of url validation errors
+     */
     public URLShorteningResponse getShortenedUrl(String longUrl)  {
 
         if(Objects.isNull(longUrl) || isNotValidURL(longUrl)){
@@ -47,6 +62,17 @@ public class URLShorteningAPIService {
         return response;
     }
 
+    /**
+     *
+     * Method used to redirect to the Original Url when the short url is loaded
+     *
+     * @param shortUrl shortened url
+     * @return
+     * Redirect view object to redirect to the original url
+     * @throws
+     * URLRecordNotFoundException
+     * in case the URL is not found in the storage
+     */
     public RedirectView getRedirectUrl(String shortUrl){
 
         if(Objects.isNull(shortUrl)){
@@ -56,6 +82,18 @@ public class URLShorteningAPIService {
         return new RedirectView(getLongUrlFromDb(shortUrl));
     }
 
+    /**
+     *
+     * Method used to get the Original / Long Url based on the short Url
+     *
+     * @param shortUrl shortened Url to be used to retrieve the long /original url
+     * @return
+     * Response Object with the long/original Url
+     * @throws
+     * NotValidURLException in case of URL validation errors
+     * @throws
+     * URLRecordNotFoundException in case if the details are not found in the storage
+     */
     public URLShorteningResponse getOriginalUrl(String shortUrl){
 
         if(Objects.isNull(shortUrl) || isNotValidURL(shortUrl)){
@@ -75,6 +113,17 @@ public class URLShorteningAPIService {
     }
 
 
+    /**
+     *
+     * Used to retrieve the long/original Url from storage based on the hash value
+     *
+     * @param storedHash stored hash value
+     * @return
+     * long/original Url from storage
+     * @throws
+     * URLRecordNotFoundException
+     * when the record is not found in the storage
+     */
     private String getLongUrlFromDb(String storedHash){
         logger.info("Search for record in DB");
         logger.debug("hash value searched -- "+storedHash);

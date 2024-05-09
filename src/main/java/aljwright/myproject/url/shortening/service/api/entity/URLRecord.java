@@ -9,6 +9,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ *
+ * Entity Class used to store the Original/Long Url and the shortened Url
+ *
+ */
 @Entity
 @Data
 @NoArgsConstructor
